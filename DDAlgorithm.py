@@ -11,14 +11,16 @@ def DDAlgorithm(n,theta, m):
     delta = round((m * math.log(2)) / infectedNo)
     positiveTests = set()
     positiveIdentifiedIndividuals = set()
+    individualsSet = set()
     G = nx.Graph()
     # generate bipartite graph matching individuals to tests
     for x in range(n):
+        individualsSet.add(x+m)
         matchedTests = random.sample(range(0, m), delta)
         for i in matchedTests:
             G.add_edge(x+m, i)
     # display generated bipartite graph
-    nx.draw_networkx(G)
+    nx.draw_networkx(G, pos = nx.drawing.layout.bipartite_layout(G, individualsSet))
     plt.show()
     # save test results
     for x in range(infectedNo):
@@ -38,7 +40,7 @@ def DDAlgorithm(n,theta, m):
     # print set of found individuals
     print(positiveIdentifiedIndividuals)
 
-DDAlgorithm(49, 0.5, 40)
+DDAlgorithm(20, 0.5, 10)
 
 
 
