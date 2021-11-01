@@ -14,17 +14,17 @@ def DDAlgorithm(n,theta, m):
     individualsSet = set()
     G = nx.Graph()
     # generate bipartite graph matching individuals to tests
-    for x in range(n):
-        individualsSet.add(x+m)
+    for x in range(m, m+n):
+        individualsSet.add(x)
         matchedTests = random.sample(range(0, m), delta)
         for i in matchedTests:
-            G.add_edge(x+m, i)
+            G.add_edge(x, i)
     # display generated bipartite graph
     nx.draw_networkx(G, pos = nx.drawing.layout.bipartite_layout(G, individualsSet))
     plt.show()
     # save test results
-    for x in range(infectedNo):
-        for i in list(G.neighbors(x+m)):
+    for x in range(m, m+infectedNo):
+        for i in list(G.neighbors(x)):
             positiveTests.add(i)
     # remove individuals connected to a negative test
     for x in range(0, m):
