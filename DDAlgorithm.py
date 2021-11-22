@@ -1,38 +1,52 @@
 import math
 import random
-import networkx as nx
+import time
 
+# Input : n, theta, m
+# Output : set of marked individuals
+
+random.seed(1)
 
 def dd_algorithm(n, theta, m):
-    # initialize variables
-    infectedNo = math.pow(n, theta)
-    delta = round((m * math.log(2)) / infectedNo)
-    infectedNo = round(infectedNo)
+    # Initialize variables
     positiveTests = set()
-    positiveIdentifiedIndividuals = set()
-    G = nx.Graph()
-    # generate bipartite graph matching individuals to tests
-    for x in range(m, m + n):
-        matchedTests = random.sample(range(0, m), delta)
-        for i in matchedTests:
-            G.add_edge(x, i)
-    # create test results (consider individuals m to m+infectedNo as infected and mark their connected tests as +ve)
-    for x in range(m, m + infectedNo):
-        for i in list(G.neighbors(x)):
-            positiveTests.add(i)
-    # remove individuals connected to a negative test from the graph
-    for x in range(0, m):
-        if x not in positiveTests and G.has_node(x):
-            for i in list(G.neighbors(x)):
-                G.remove_node(i)
-    # find all positive tests connected to only 1 individual, and mark the individual
-    for x in range(0, m):
-        if x in positiveTests:
-            connectedIndividuals = list(G.neighbors(x))
-            if len(connectedIndividuals) == 1:
-                positiveIdentifiedIndividuals.add(connectedIndividuals[0])
-    # print length of set containing such individuals
-    print(len(positiveIdentifiedIndividuals))
+    infectedNo = round(math.pow(n, theta))
+    delta = round((m * math.log(2)) / infectedNo)
+    markedIndividuals = set()
+    testToIndividuals = {}
+    # Generate bipartite graph matching each individual to delta tests
+    for individual in range(infectedNo):
+        # Pick delta tests to match
+        matchedTests = random.sample(range(n, n + m), delta)
+        for test in matchedTests:
+            # Create mapping
+            if test not in testToIndividuals:
+                testToIndividuals[test] = set()
+            testToIndividuals[test].add(individual)
+            # Any test connected to this range of individuals is positive
+            positiveTests.add(test)
+    # No more positive tests can be created at this point
+    for individual in range(infectedNo, n):
+        # Pick delta tests to match
+        matchedTests = random.sample(range(n, n + m), delta)
+        for test in matchedTests:
+            # Create mapping
+            if test in positiveTests:
+                # If the individual is mapped to a negative test, then it will be removed anyway
+                # Thus, only mappings connecting an individual to a positive test are added
+                testToIndividuals[test].add(individual)
 
 
-dd_algorithm(49, 0.5, 49)
+    # Find all positive tests connected to only 1 individual, and mark the individual
+    for test in positiveTests:
+        if len(testToIndividuals[test]) == 1:
+            for individual in testToIndividuals[test]:
+                markedIndividuals.add(individual)
+    # Return set of marked individuals
+    return markedIndividuals
+
+# start = time.time()
+print(dd_algorithm(100000, 0.8, 50000))
+# end = time.time()
+# print(str(end - start))
+
