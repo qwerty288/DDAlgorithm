@@ -5,6 +5,8 @@ import random
 def set_seed(seed):
     random.seed(seed)
 
+# Implementation Complexity - O(m + (n * delta))
+
 
 def dd_algorithm(n, theta, m):
     # Initialize variables
@@ -18,6 +20,7 @@ def dd_algorithm(n, theta, m):
     The permutation of infected and non-infected individuals is not a required input for the algorithm 
     Thus, we will consider the individuals in range(infectedNo) to be infected, for ease of implementation
     """
+    # Complexity - O(n * delta)
     for individual in range(n):
         # Find delta unique tests to match to each individual
         matchedTests = random.sample(range(n, n + m), delta)
@@ -47,6 +50,7 @@ def dd_algorithm(n, theta, m):
                 for test in matchedTests:
                     testToIndividuals[test].add(individual)
     # Find all positive tests connected to only 1 individual, and add the found individuals to the set
+    # Complexity - O(m)
     for test in positiveTests:
         if len(testToIndividuals[test]) == 1:
             for individual in testToIndividuals[test]:
