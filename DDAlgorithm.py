@@ -15,6 +15,7 @@ def dd_algorithm(n, theta, m):
     positiveTests = set()
     markedIndividuals = set()
     testToIndividuals = {}
+    positiveTestsWith1Individual = {}
     """
     Generate bipartite graph matching the individuals to tests
     The permutation of infected and non-infected individuals is not a required input for the algorithm 
@@ -23,11 +24,15 @@ def dd_algorithm(n, theta, m):
     # Complexity - O(n * delta)
     for individual in range(n):
         # Find delta unique tests to match to each individual
-        matchedTests = random.sample(range(n, n + m), delta)
+        matchedTests = random.sample(range(n, n + m), delta) # need the positive tests that only appear once
         # Match the individuals to tests
         if individual < infectedNo:
             # If the individual is in the infected range, then label any connected tests as +ve
             for test in matchedTests:
+                if test not in positiveTests:
+                    positiveTestsWith1Individual[test] = individual
+                elif test in positiveTestsWith1Individual:
+                    positiveTestsWith1Individual.pop(test)
                 if test not in testToIndividuals:
                     testToIndividuals[test] = set()
                 testToIndividuals[test].add(individual)
@@ -48,14 +53,12 @@ def dd_algorithm(n, theta, m):
                     break
             if add:
                 for test in matchedTests:
+                    if test in positiveTestsWith1Individual:
+                        positiveTestsWith1Individual.pop(test)
                     testToIndividuals[test].add(individual)
     # Find all positive tests connected to only 1 individual, and add the found individuals to the set
-    # Complexity - O(m)
-    for test in positiveTests:
-        if len(testToIndividuals[test]) == 1:
-            for individual in testToIndividuals[test]:
-                markedIndividuals.add(individual)
-    # Return set of marked individuals
-    return markedIndividuals
+    return set(positiveTestsWith1Individual.values())
+
+
 
 

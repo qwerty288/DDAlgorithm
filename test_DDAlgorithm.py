@@ -59,11 +59,10 @@ class Test:
     # 0.06688397634275167
 
     def test_dd_algorithm_correctness(self):
-        # Test the algorithm against a verified, slower implementation to verify correctness
+        # Test the algorithm against a verified, slower implementation
         for i in range(1, 50):
             random.seed(i)
             theta = random.random()
-            print(theta)
             set_seed(i)
             dd_algorithm_result = dd_algorithm(40*i, theta, 30*i)
             set_seed(i)
