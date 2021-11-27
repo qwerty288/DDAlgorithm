@@ -2,7 +2,6 @@ import math
 import random
 import networkx as nx
 import copy
-import matplotlib.pyplot as plt
 
 
 def set_seed_slow(seed):
@@ -36,32 +35,26 @@ def removed_correctly(new_G, original_G, n, positiveTests):
             return False
         if not connectedToOnlyPositiveTest and individual in new_G:
             return False
-        return True
+    return True
 
 
-def dd_algorithm_slow(n, theta, m):
+def dd_algorithm_slow(n, theta, m, test):
     # Initialize variables
     infectedNo = round(math.pow(n, theta))
     delta = round((m * math.log(2)) / infectedNo)
     positiveTests = set()
     markedIndividuals = set()
-    # individualsSet = set()
     G = nx.Graph()
     # Generate bipartite graph matching individuals to tests
     for x in range(n):
-        # individualsSet.add(x)
         # Match each individual to delta unique tests
         matchedTests = random.sample(range(n, m + n), delta)
         for i in matchedTests:
             G.add_edge(x, i)
-        # Check if the graph has been correctly generated
-    if not valid_graph(G, delta, n, m):
-        return False
+    # Check if the graph has been correctly generated
     G2 = copy.deepcopy(G)
-    # Display graph
-    # nx.draw_networkx(G, pos=nx.drawing.layout.bipartite_layout(G, individualsSet))
-    # plt.show()
-
+    if test and not valid_graph(G, delta, n, m):
+        return False
     # Generate test results using the assumption that individuals in range(infectedNo) are infected
     for x in range(infectedNo):
         for i in list(G.neighbors(x)):
@@ -72,7 +65,7 @@ def dd_algorithm_slow(n, theta, m):
             for i in list(G.neighbors(x)):
                 G.remove_node(i)
     # Check if above step has been performed correctly
-    if not removed_correctly(copy.deepcopy(G), G2, n, positiveTests):
+    if test and not removed_correctly(copy.deepcopy(G), G2, n, positiveTests):
         return False
     # Iterate through all positive tests
     for x in positiveTests:

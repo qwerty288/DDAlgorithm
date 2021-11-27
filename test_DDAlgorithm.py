@@ -66,7 +66,7 @@ class Test:
             set_seed(i)
             dd_algorithm_result = dd_algorithm(40*i, theta, 30*i)
             set_seed(i)
-            dd_algorithm_slow_result = dd_algorithm_slow(40*i, theta, 30*i)
+            dd_algorithm_slow_result = dd_algorithm_slow(40*i, theta, 30*i, False)
             assert (dd_algorithm_result == dd_algorithm_slow_result)
         assert True
 
