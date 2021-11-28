@@ -3,9 +3,6 @@ from DDAlgorithmSlow import dd_algorithm_slow, set_seed_slow
 import random
 
 
-import random
-
-
 class Test:
     # Values of Theta used
     # 0.13436424411240122
@@ -65,7 +62,7 @@ class Test:
             theta = random.random()
             set_seed(i)
             dd_algorithm_result = dd_algorithm(40*i, theta, 30*i)
-            set_seed(i)
+            set_seed_slow(i)
             dd_algorithm_slow_result = dd_algorithm_slow(40*i, theta, 30*i, False)
             assert (dd_algorithm_result == dd_algorithm_slow_result)
         assert True

@@ -40,4 +40,3 @@ def dd_algorithm(n, theta, m):
         markedIndividuals.add(positiveTestsWith1Individual[test])
     return markedIndividuals
 
-
