@@ -13,7 +13,7 @@ def valid_graph(G, delta, n, m):
     for edge in G.edges:
         a = edge[0]
         b = edge[1]
-        if a not in range(n) and b not in range(n, m + n) and a not in range(n, m + n) and b not in range(n):
+        if a not in range(n) and b not in range(n, m + n) or a not in range(n, m + n) and b not in range(n):
             return False
     # Check if each individual node has degree delta
     for individual in range(n):
@@ -45,7 +45,7 @@ def dd_algorithm_slow(n, theta, m, test):
     positiveTests = set()
     markedIndividuals = set()
     G = nx.Graph()
-    # Generate bipartite graph matching individuals to tests
+    # Generate bipartite graph matching individuals to tests (Complexity - O(n * delta))
     for x in range(n):
         # Match each individual to delta unique tests
         matchedTests = random.sample(range(n, m + n), delta)
@@ -56,6 +56,7 @@ def dd_algorithm_slow(n, theta, m, test):
     if test and not valid_graph(G, delta, n, m):
         return False
     # Generate test results using the assumption that individuals in range(infectedNo) are infected
+    # (Complexity - O(n^theta * delta))
     for x in range(infectedNo):
         for i in list(G.neighbors(x)):
             positiveTests.add(i)
