@@ -8,24 +8,31 @@ theta = float(input("Enter theta: "))
 infectedNo = round(math.pow(n, theta))
 iltb = (max(theta, 1 - theta) * math.pow(n, theta) * math.log(n)) / math.pow(math.log(2), 2)
 print("Information Theoretic Lower Bound: " + str(iltb))
-print("Enter values for m, or type '-1' to generate graph: ")
+lowerBound = int(input("Enter lower bound for m: "))
+upperBound = int(input("Enter upper bound for m: "))
+step = int(input("Enter step for m: "))
+
 x = []
+
+tempX = lowerBound
+while tempX < upperBound:
+    x.append(tempX)
+    tempX = tempX + step
+
 y = []
 x2 = [iltb, iltb]
 y2 = [0, 100]
 
-while 1 == 1:
-    inputLine = int(input(""))
-    if inputLine == -1:
-        break
-    else:
-        x.append(inputLine)
-
-
 print("Running Algorithm...")
 
 for m in x:
-    y.append(round(100 * (len(dd_algorithm(n, theta, m)) / infectedNo)))
+    # Repeat each value 5 times
+    yValue = 0
+    for i in range(5):
+        yValue = yValue + round(100 * (len(dd_algorithm(n, theta, m)) / infectedNo))
+    print(m)
+    yValue = yValue / 5
+    y.append(yValue)
 
 plt.plot(x, y, label=" ")
 plt.plot(x2, y2, label="  ")
