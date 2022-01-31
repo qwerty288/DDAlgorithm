@@ -42,6 +42,8 @@ def dd_algorithm_slow(n, theta, m, test):
     # Initialize variables
     infectedNo = round(math.pow(n, theta))
     delta = round((m * math.log(2)) / infectedNo)
+    if delta == 0:
+        return set()
     positiveTests = set()
     markedIndividuals = set()
     G = nx.Graph()
@@ -76,5 +78,6 @@ def dd_algorithm_slow(n, theta, m, test):
             markedIndividuals.add(connectedIndividuals[0])
     # Return set of marked individuals
     return markedIndividuals
+
 
 

@@ -10,6 +10,8 @@ def dd_algorithm(n, theta, m):
     # Initialize variables
     infectedNo = round(math.pow(n, theta))
     delta = round((m * math.log(2)) / infectedNo)
+    if delta == 0:
+        return set()
     positiveTests = set()
     markedIndividuals = set()
     positiveTestsWith1Individual = {}
